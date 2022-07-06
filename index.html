@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoBangBang</title>
+
+    <link rel="stylesheet" href="css/bang.css">
+
+</head>
+<body>
+    <div class="info-ex" id="info-ex">
+        展开
+    </div>
+    <div class="info" id="info">
+        <div class="cur-info">
+            <div class="grid-container">
+                <div class="grid black" id="sample-grid"></div>
+            </div>
+            <div class="cur">
+                当前执棋: <span id="color-cur">cur</span>
+            </div>
+        </div>
+        
+        <div class="button-container">
+            <ul>
+                <li class="button" id="help-b">帮助</li>
+                <li class="button" id="rest-b">重新开始</li>
+                <li class="button" id="fold-b">收起</li>
+            </ul>
+        </div>
+    </div>
+    <div class="game-container">
+        <div class="chessboard" id="chessboard">
+        
+        </div>
+        <div class="above win" id="win" style="visibility:hidden;opacity:0;">
+            <div class="message">
+                游戏结束, <span id="color-name">color</span>
+            </div>
+            <div class="button">
+                <button id="restart">重新开始</button>
+            </div>
+        </div>
+
+        <div class="above help" id="help" style="visibility:hidden;opacity:0;">
+            <div class="message">
+                <h2>五子棋</h2>
+                <div class="help-con">
+                    黑子先行, 黑白双方交替于横竖线交点处落子, 先形成五子连珠者胜
+                </div>
+            </div>
+            <div class="button">
+                <button id="continue">继续游戏</button>
+            </div>
+        </div>
+    </div>
+
+    <noscript>
+        <div>
+        此页面需要开启 javascript 以正常运行<br>
+        请检查浏览器的相关选项并刷新页面
+        </div>
+    </noscript>
+    <script type="text/javascript" src="js/bang.js">
+    </script>
+</body>
+</html>
