@@ -108,12 +108,12 @@ function putStone (d, c) {
         d.setAttribute('data-on', true);
         data[gg[0]][gg[1]] = curColor;
         ++putSum;
-        dt = judgeStone(gg[0]-0, gg[1]-0);
         
+        return judgeStone(gg[0]-0, gg[1]-0);
     }
     
     
-    return dt;
+    return false;
 }
 
 /**
