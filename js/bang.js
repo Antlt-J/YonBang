@@ -1,10 +1,10 @@
 
 var color = [
-    'black', 'white'
+    'black', 'white', 'cyan'
 ];
 var edgeLen = 15;
 var sum = edgeLen * edgeLen;
-var hoverColor = ['#36363680','#dededeb0'];
+var hoverColor = [];
 
 var data = [];
 var board = null;
@@ -19,7 +19,6 @@ var isInit = init();
 
 function init () {
     window.addEventListener('load', function () {
-        rootE = document.documentElement;
         sample = document.getElementById('sample-grid');
         sampleText = document.getElementById('color-cur');
         board = initBoard(data);
@@ -30,6 +29,8 @@ function init () {
     let fd = document.getElementById('fold-b');
     let ex = document.getElementById('info-ex');
     let info = document.getElementById('info');
+
+    rootE = document.documentElement;
 
     hp.addEventListener('click', function () {
         if(isInit) {
@@ -51,6 +52,11 @@ function init () {
 
     document.getElementById('restart').addEventListener('click', restart);
     document.getElementById('continue').addEventListener('click', contiGame);
+
+    for(let j=0;j<color.length;++j) {
+        hoverColor[j] = window.getComputedStyle(rootE).getPropertyValue('--hover-'+color[j]);
+    }
+    
     return true;
 }
 

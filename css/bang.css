@@ -5,6 +5,9 @@
 
 :root {
     --hover-color: #33333380;
+    --hover-black:#36363680;
+    --hover-white: #dededeb0;
+    --hover-cyan: #5de5a485;
 }
 
 .game-container {
@@ -96,12 +99,17 @@
     background-image: linear-gradient(-45deg, #fff 39%, #cdcdcd);
 }
 
+.grid.cyan {
+    background-color: #6ad2a4;
+    background-image: linear-gradient(-45deg, #8ee6bf 29%, #4cc28d);
+}
+
 .grid:not(.white):not(.black):hover {
     background-color: var(--hover-color);
     
 }
 
-.grid:not(.white):not(.black):active {
+.grid:not(.white):not(.black):not(.cyan):active {
     background-color: rgb(153, 106, 106);
     
 }
