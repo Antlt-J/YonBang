@@ -8,6 +8,19 @@
     --hover-black:#36363680;
     --hover-white: #dededeb0;
     --hover-cyan: #5de5a485;
+    --chess-board-bgc: hsl(42, 67%, 62%);
+    --info-color: hsl(41, 60%, 50%);
+    --info-border-color: hsl(41, 52%, 45%);
+    --line-color: #000;
+}
+
+body {
+    background-color: #fff;
+
+    transition: background-color 0.25s ease;
+    -moz-transition: background-color 0.25s ease;
+    -o-transition: background-color 0.25s ease;
+    -webkit-transition: background-color 0.25s ease;
 }
 
 .game-container {
@@ -19,7 +32,7 @@
 .chessboard {
     width: 585px;
     height: 585px;
-    background-color: hsl(42, 67%, 62%);
+    background-color: var(--chess-board-bgc);
     user-select: none;
     position: relative;
     z-index: 3;
@@ -71,7 +84,7 @@
     content: "";
     position: absolute;
     z-index: -1;
-    background-color: #000;
+    background-color: var(--line-color);
     left: 19px;
     top: 19px;
     width: 2px;
@@ -82,7 +95,7 @@
     content: "";
     position: absolute;
     z-index: -1;
-    background-color: #000;
+    background-color: var(--line-color);
     left: 19px;
     top: 19px;
     width: 546px;
@@ -121,7 +134,7 @@
     left: 0px;
     z-index: 115;
     margin: auto 0px;
-    background-color: hsl(41, 60%, 50%);
+    background-color: var(--info-color);
     user-select: none;
 
 }
@@ -173,7 +186,7 @@
 .button-container ul li {
     list-style: none;
     background-color: #ffffff80;
-    border: hsl(41, 52%, 45%) solid 3px;
+    border: var(--info-border-color) solid 3px;
     text-align: center;
     max-width: 8em;
     margin: 5px auto;
@@ -194,9 +207,9 @@
     left: -20px;
     z-index: 114;
     padding: 1em 2px 1.5em 0;
-    border: hsl(41, 52%, 45%) solid 3px;
+    border: var(--info-border-color) solid 3px;
     border-left: 0 solid;
-    background-color: hsl(41, 60%, 50%);
+    background-color: var(--info-color);
     user-select: none;
     writing-mode: vertical-lr;
     cursor: pointer;
@@ -212,10 +225,10 @@
 
 .info, 
 .info-ex {
-    transition: left 0.25s ease;
-    -moz-transition: left 0.25s ease;
-    -o-transition: left 0.25s ease;
-    -webkit-transition: left 0.25s ease;
+    transition: left 0.25s ease, background-color 0.25s ease;
+    -moz-transition: left 0.25s ease, background-color 0.25s ease;
+    -o-transition: left 0.25s ease, background-color 0.25s ease;
+    -webkit-transition: left 0.25s ease, background-color 0.25s ease;
 }
 
 noscript {
@@ -243,3 +256,31 @@ noscript div {
     margin: auto;
 }
 
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --chess-board-bgc: hsl(196, 18%, 47%);
+        --info-color: hsl(197, 37%, 60%);
+        --info-border-color: hsl(197, 32%, 43%);
+        --line-color: #cdcdcd;
+        
+    }
+    body {
+        background-color: #000;
+    }
+    .info-ex:hover {
+        background-color: hsl(197, 37%, 70%);
+    }
+    
+    .info-ex:active {
+        background-color: hsl(197, 29%, 50%);
+    }
+}
+
+.grid::after,
+.grid::before {
+    transition: background-color 0.25s ease;
+    -moz-transition: background-color 0.25s ease;
+    -o-transition: background-color 0.25s ease;
+    -webkit-transition: background-color 0.25s ease;
+}
