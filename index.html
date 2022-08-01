@@ -7,6 +7,7 @@
     <title>YonBang</title>
 
     <link rel="stylesheet" href="css/bang.css">
+    <link rel="shortcut icon" href="static/icon.png" type="image/png">
 
 </head>
 <body>
@@ -14,6 +15,15 @@
         展开
     </div>
     <div class="info" id="info">
+        <div class="cur-info win-info" id="win-info" style="visibility:hidden;height:0;">
+            <div class="grid-container">
+                <div class="grid black" id="win-grid"></div>
+            </div>
+            <div class="cur">
+                优胜者: <span id="win-cur">winner</span>
+            </div>
+        </div>
+
         <div class="cur-info">
             <div class="grid-container">
                 <div class="grid black" id="sample-grid"></div>
@@ -44,11 +54,25 @@
             </div>
         </div>
 
+        <div class="above win" id="win-0" style="visibility:hidden;opacity:0;">
+            <div class="message">
+                四子连珠, <span id="color-win">color</span> <br/>
+                如继续游戏, 则剩余玩家将以五子棋规则决出次胜者
+            </div>
+            <div class="button">
+                <button id="restart-1">重新开始</button>
+                <button id="continue-1">继续游戏</button>
+            </div>
+        </div>
+
         <div class="above help" id="help" style="visibility:hidden;opacity:0;">
             <div class="message">
                 <h2>三人四子棋</h2>
                 <div class="help-con">
-                    黑子先行, 黑白双方交替于横竖线交点处落子, 先形成五子连珠者胜
+                    本游戏规则类似于五子棋, 但需要三名玩家进行游戏。游戏时, 
+                    按照黑-白-青颜色顺序依次落子, 先达成四子连珠者为优胜, 
+                    剩余两玩家可继续以五子棋规则 (这里暂不加以禁手限制) 
+                    在剩余的棋盘上决出次胜者, 至此一局比赛结束。
                 </div>
             </div>
             <div class="button">

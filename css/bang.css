@@ -130,6 +130,17 @@
     margin: 5px auto;
 }
 
+.win-info {
+    margin: 5px auto;
+    overflow: hidden;
+    height: 40px;
+
+    transition: height ease 0.2s;
+    -moz-transition: height ease 0.2s;
+    -o-transition: height ease 0.2s;
+    -webkit-transition: height ease 0.2s;
+}
+
 #color-cur {
     display: inline-block;
     min-width: 5em;

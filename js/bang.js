@@ -14,13 +14,21 @@ var putSum = 0;
 
 var sample = null;
 var sampleText = null;
+var winSample = null;
+var winSampleText = null;
 
 var isInit = init();
+var stage = 0;
+var winner = -1;
+var winStage = [4, 5];
 
 function init () {
     window.addEventListener('load', function () {
         sample = document.getElementById('sample-grid');
         sampleText = document.getElementById('color-cur');
+        winSample = document.getElementById('win-grid');
+        winSampleText = document.getElementById('win-cur');
+
         board = initBoard(data);
         gameHelp('开始游戏');
     });
@@ -51,7 +59,9 @@ function init () {
     });
 
     document.getElementById('restart').addEventListener('click', restart);
+    document.getElementById('restart-1').addEventListener('click', restart);
     document.getElementById('continue').addEventListener('click', contiGame);
+    document.getElementById('continue-1').addEventListener('click', contiAfterWin);
 
     for(let j=0;j<color.length;++j) {
         hoverColor[j] = window.getComputedStyle(rootE).getPropertyValue('--hover-'+color[j]);
@@ -63,8 +73,11 @@ function init () {
 
 function initBoard (data) {
     var boardEle = document.getElementById('chessboard');
+    stage = 0;
+    gentlyExpandHideV(document.getElementById('win-info'));
     changeColor(0);
     putSum = 0;
+    
 
     boardEle.innerHTML = '';
     for (let i=0; i<edgeLen; ++i) {
@@ -124,30 +137,69 @@ function putStone (d, c) {
  */
 function changeColor (nextColor) {
     nextColor = nextColor == undefined?((curColor + 1)%color.length):nextColor;
+    if (stage == 1 && nextColor == winner) {
+        nextColor = (nextColor + 1)%color.length;
+    }
     curColor = nextColor;
     rootE.style.setProperty('--hover-color',hoverColor[curColor]);
     sample.className = 'grid ' + color[curColor];
     sampleText.innerHTML = color[curColor];
 }
 
-function curWin(c, isDraw) {
+function curWin(c, isDraw, stage) {
     let wi = document.getElementById('win');
-    let inh = isDraw?'达成平局!':c + ' 赢得了这局游戏!'
-    document.getElementById('color-name').innerHTML = inh;
+    let inh = '达成平局!';
+    let rt = false;
+    if (!isDraw) {
+        if (stage == 0) {
+            inh = color[c] + ' 赢得了这局游戏!';
+            document.getElementById('color-win').innerHTML = inh;
+            wi = document.getElementById('win-0');
+            winner = curColor;
+
+            rt = true;
+        } else {
+            inh = color[winner] + '为优胜者, ' + color[c] + ' 为次胜者!';
+            document.getElementById('color-name').innerHTML = inh;
+        }
+        
+    } else {
+        if (stage == 1) {
+            inh = color[winner] + '为优胜者, 其余玩家' + inh;
+        }
+        document.getElementById('color-name').innerHTML = inh;
+    }
+
+    
     isInit = false;
     gentlyShow(wi);
+    return rt;
 }
 
 function restart() {
     board = initBoard(data);
     gentlyHide(document.getElementById('win'));
+    gentlyHide(document.getElementById('win-0'));
     gentlyHide(document.getElementById('help'));
 
+    
     isInit = true;
 }
 
 function contiGame() {
     gentlyHide(document.getElementById('help'));
+}
+
+function contiAfterWin () {
+    stage = 1;
+    gentlyExpandShowV(document.getElementById('win-info'));
+    winSample.className = 'grid ' + color[winner];
+    winSampleText.innerHTML = color[winner];
+
+    gentlyHide(document.getElementById('win'));
+    gentlyHide(document.getElementById('win-0'));
+    gentlyHide(document.getElementById('help'));
+    isInit = true;
 }
 
 function gameHelp(bt) {
@@ -164,26 +216,25 @@ function gameHelp(bt) {
 
 function judgeStone (i, j) {
     if (judgeStoneAt (i, j)) {
-        curWin(color[curColor]);
-        return false;    
+        return curWin(curColor, false, stage);  
     }
     if (putSum >= sum) {
-        curWin(null, true);
-        return false;
+        return curWin(null, true, stage);
     }
     return true;
 }
 
 function judgeStoneAt (i, j) {
     for(let k=0;k<4;++k) {
-        if (judgeTemp(getTemp(k,i,j))) {
+        winN = winStage[stage];
+        if (judgeTemp(getTemp(k,i,j,winN), winN)) {
             return true;
         }
     }
     return false;
 }
 
-function judgeTemp (temp) {
+function judgeTemp (temp, winN) {
     let c = 0;
     let k = undefined;
     for(let i=0;i<temp.length;++i) {
@@ -192,7 +243,7 @@ function judgeTemp (temp) {
             k = undefined;
         } else if (temp[i] == k) {
             ++c;
-            if (c>=5){
+            if (c>=winN){
                 return true;
             }
         } else {
@@ -210,28 +261,30 @@ function judgeTemp (temp) {
  * left-up to right-down, 3 for left-down to right-up. 
  * @param {Number} i Row number.
  * @param {Number} j Column number.
+ * @param {Number} nw The number that can tell one is win.
  * @return {Array} stone temp.
  */
-function getTemp (type, i, j) {
+function getTemp (type, i, j, nw) {
     
     let res = [];
+    let inn = nw - 1;
     
     switch (type) {
     case 0:
-        for(let n=j-4>0?j-4:0, k=0; n<j+5 && n<edgeLen; ++k, ++n) {
+        for(let n=j-inn>0?j-inn:0, k=0; n<j+nw && n<edgeLen; ++k, ++n) {
             res[k] = data[i][n];
         }
         break;
     case 1:
-        for(let m=i-4>0?i-4:0, k=0; m<i+5 && m<edgeLen; ++k, ++m) {
+        for(let m=i-inn>0?i-inn:0, k=0; m<i+nw && m<edgeLen; ++k, ++m) {
             res[k] = data[m][j];
         }
         break;
     case 2: {
-        let il = i-4;
-        let ir = i+5;
-        let jl = j-4;
-        let jr = j+5;
+        let il = i-inn;
+        let ir = i+nw;
+        let jl = j-inn;
+        let jr = j+nw;
         
         if(il<0||jl<0) {
             let t = il<jl?il:jl;
@@ -249,14 +302,14 @@ function getTemp (type, i, j) {
         }}
         break;
     case 3: {
-        let ml=i-4;
-        let nr=j+4;
+        let ml=i-inn;
+        let nr=j+inn;
         if(ml<0||nr>=edgeLen) {
             let t = (-ml)<(nr+1-edgeLen)?(nr+1-edgeLen):(-ml);
             ml += t;
             nr -= t;
         }
-        for(let m=ml,n=nr,k=0;m<i+5&&n>=0&&m<edgeLen;++k,++m,--n) {
+        for(let m=ml,n=nr,k=0;m<i+nw&&n>=0&&m<edgeLen;++k,++m,--n) {
             
             res[k] = data[m][n];
         }}
@@ -291,5 +344,16 @@ function gentlySlideShow (gena) {
     gena.style.left = 0;
 }
 
+function gentlyExpandShowV (gena) {
+    gena.style.visibility = 'visible';
+    gena.style.height = '40px';
+}
+
+function gentlyExpandHideV (gena) {
+    gena.style.height = 0;
+    setTimeout(function(){
+        gena.style.visibility = 'hidden';
+    }, 200);
+}
 
 
